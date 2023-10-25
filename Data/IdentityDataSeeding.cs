@@ -20,6 +20,7 @@ namespace IdentityApp.Data
 			//if (context.Database.GetPendingMigrations().Any())	context.Database.Migrate();		
 			
 			var userManager = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<UserManager<IdentityUser>>(); //buradaki IdentityUser bizim dbmizdeki AspNetUsers tablomuza denk geliyor.
+			//userManager uzerinden artık bir kullanıcı olusturabiliriz.
 
 			var user = await userManager.FindByNameAsync(adminUser);
 			if (user == null)
