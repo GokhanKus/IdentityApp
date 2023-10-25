@@ -1,7 +1,21 @@
+using IdentityApp.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//var connectionString = builder.Configuration.GetConnectionString("SqLite_Connection");
+//builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlite(connectionString));
+
+
+builder.Services.AddDbContext<IdentityContext>(
+	options => options.UseSqlite(builder.Configuration["ConnectionStrings:SqLite_Connection"]));
+builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+
+
 
 var app = builder.Build();
 
