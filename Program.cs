@@ -13,8 +13,19 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<IdentityContext>(
 	options => options.UseSqlite(builder.Configuration["ConnectionStrings:SqLite_Connection"]));
-builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
 
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+	options.Password.RequireNonAlphanumeric = false;
+	options.Password.RequireLowercase = false;
+	options.Password.RequireUppercase = false;
+	options.Password.RequiredLength = 6;
+
+	options.User.RequireUniqueEmail = true; // ayný email ile farklý username alýp kayýt olunabiliyordu, artýk olamaz.
+	options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+});
 
 
 var app = builder.Build();
