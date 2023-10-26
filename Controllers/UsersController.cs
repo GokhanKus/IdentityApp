@@ -8,7 +8,7 @@ namespace IdentityApp.Controllers
 {
 	public class UsersController : Controller
 	{
-		private UserManager<AppUser> _userManager;
+		private readonly UserManager<AppUser> _userManager;
 		public UsersController(UserManager<AppUser> userManager)
 		{
 			_userManager = userManager;
