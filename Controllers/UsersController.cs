@@ -9,10 +9,11 @@ namespace IdentityApp.Controllers
 	public class UsersController : Controller
 	{
 		private readonly UserManager<AppUser> _userManager;
-		public UsersController(UserManager<AppUser> userManager)
+		private readonly RoleManager<AppRole> _roleManager;
+		public UsersController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
 		{
 			_userManager = userManager;
-
+			_roleManager = roleManager;
 		}
 		public IActionResult Index()
 		{
@@ -51,17 +52,19 @@ namespace IdentityApp.Controllers
 
 		public async Task<IActionResult> Edit(string id)
 		{
-			if (id == null)		return RedirectToAction("Index");
-			
+			if (id == null) return RedirectToAction("Index");
+
 			var user = await _userManager.FindByIdAsync(id);
 
 			if (user != null)
 			{
+				ViewBag.Roles = await _roleManager.Roles.Select(i=>i.Name).ToListAsync();
 				var model = new EditViewModel
 				{
 					Id = user.Id,
 					FullName = user.FullName,
-					Email = user.Email
+					Email = user.Email,
+					SelectedRoles = await _userManager.GetRolesAsync(user),
 				};
 				return View(model);
 			}
@@ -71,8 +74,8 @@ namespace IdentityApp.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(string id, EditViewModel model)
 		{
-			if (id != model.Id)		return RedirectToAction("Index");
-			
+			if (id != model.Id) return RedirectToAction("Index");
+
 			if (ModelState.IsValid)
 			{
 				var user = await _userManager.FindByIdAsync(model.Id);
@@ -86,7 +89,7 @@ namespace IdentityApp.Controllers
 					if (result.Succeeded && !string.IsNullOrEmpty(model.Password))
 					{
 						await _userManager.RemovePasswordAsync(user);
-						await _userManager.AddPasswordAsync(user,model.Password);
+						await _userManager.AddPasswordAsync(user, model.Password);
 					}
 					if (result.Succeeded)
 					{
