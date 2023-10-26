@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdentityApp.Controllers
 {
-	public class UsersController:Controller
+	public class UsersController : Controller
 	{
 		private UserManager<AppUser> _userManager;
-        public UsersController(UserManager<AppUser> userManager)
-        {
-			  _userManager = userManager;
+		public UsersController(UserManager<AppUser> userManager)
+		{
+			_userManager = userManager;
 
 		}
-        public IActionResult Index()
+		public IActionResult Index()
 		{
-			var model = _userManager.Users;	
+			var model = _userManager.Users;
 			return View(model);
 		}
 		public IActionResult Create()
@@ -41,12 +41,34 @@ namespace IdentityApp.Controllers
 				{
 					return RedirectToAction("Index");
 				}
-				foreach (IdentityError err  in result.Errors) //ilgili hata mesajlarını yazdıralım eğer valid değilse
+				foreach (IdentityError err in result.Errors) //ilgili hata mesajlarını yazdıralım eğer valid değilse
 				{
 					ModelState.AddModelError("", err.Description);
 				}
 			}
 			return View(model);
+		}
+
+		public async Task<IActionResult> Edit(string id)
+		{
+			if (id == null)
+			{
+				return RedirectToAction("Index");
+			}
+			var user = await _userManager.FindByIdAsync(id);
+
+			if (user != null)
+			{
+				var model = new EditViewModel
+				{
+					Id = user.Id,
+					FullName = user.FullName,
+					Email = user.Email
+				};
+				return View(model);
+			}
+			return RedirectToAction("Index");
+
 		}
 	}
 }
