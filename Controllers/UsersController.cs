@@ -58,7 +58,7 @@ namespace IdentityApp.Controllers
 
 			if (user != null)
 			{
-				ViewBag.Roles = await _roleManager.Roles.Select(i=>i.Name).ToListAsync();
+				ViewBag.Roles = await _roleManager.Roles.Select(i => i.Name).ToListAsync();
 				var model = new EditViewModel
 				{
 					Id = user.Id,
@@ -93,6 +93,12 @@ namespace IdentityApp.Controllers
 					}
 					if (result.Succeeded)
 					{
+						await _userManager.RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user)); //once userdan rolleri kaldıralım
+
+						if (model.SelectedRoles != null)
+						{
+							await _userManager.AddToRolesAsync(user, model.SelectedRoles); //sonra usera rolleri atayalım
+						}
 						return RedirectToAction("Index");
 					}
 
