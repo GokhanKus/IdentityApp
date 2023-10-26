@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdentityApp.Data
 {
 	public static class IdentityDataSeeding
 	{
-		private const string adminUser = "Admin";
+		private const string adminUser = "admin";
 		private const string adminPassword = "Admin_123";
 
 		public static async void IdentityTestUser(IApplicationBuilder app)
@@ -19,14 +20,15 @@ namespace IdentityApp.Data
 			}
 			//if (context.Database.GetPendingMigrations().Any())	context.Database.Migrate();		
 			
-			var userManager = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<UserManager<IdentityUser>>(); //buradaki IdentityUser bizim dbmizdeki AspNetUsers tablomuza denk geliyor.
+			var userManager = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<UserManager<AppUser>>(); //buradaki IdentityUser bizim dbmizdeki AspNetUsers tablomuza denk geliyor.
 			//userManager uzerinden artık bir kullanıcı olusturabiliriz.
 
 			var user = await userManager.FindByNameAsync(adminUser);
 			if (user == null)
 			{
-				user = new IdentityUser
+				user = new AppUser
 				{
+					FullName = "Gokhan Kus",
 					UserName = adminUser,
 					Email = "gkus1998@gmail.com",
 					PhoneNumber = "123456789"

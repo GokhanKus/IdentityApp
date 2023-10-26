@@ -1,4 +1,5 @@
 using IdentityApp.Data;
+using IdentityApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<IdentityContext>(
 	options => options.UseSqlite(builder.Configuration["ConnectionStrings:SqLite_Connection"]));
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<IdentityContext>();
 
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -24,7 +25,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 	options.Password.RequiredLength = 6;
 
 	options.User.RequireUniqueEmail = true; // ayný email ile farklý username alýp kayýt olunabiliyordu, artýk olamaz.
-	options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+	//options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
 });
 
 
