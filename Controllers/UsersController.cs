@@ -31,7 +31,8 @@ namespace IdentityApp.Controllers
 			{
 				var user = new AppUser
 				{
-					UserName = model.Email,
+					UserName = model.UserName,
+					//UserName = model.Email, //mailde "." gibi farklı sembollerin olması username icin skıntı hata verir o yüzden farklı algo veya direkt kullanıcıdan username bilgisini alalım
 					Email = model.Email,
 					FullName = model.FullName
 				};
