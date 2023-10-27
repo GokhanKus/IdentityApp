@@ -1,9 +1,11 @@
 ﻿using IdentityApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace IdentityApp.Controllers
 {
+	[Authorize] //buraya yetki verdik eger yetki yoksa user /Account/login sayfasına yonlendirilecek
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;

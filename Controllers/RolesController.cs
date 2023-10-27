@@ -81,3 +81,23 @@ namespace IdentityApp.Controllers
 		}
 	}
 }
+
+/*Authentication	temel olarak 3 farklı kimlik doğrulama yöntemi vardır;
+ 
+Cookie Based Authentication			=> tarayıcılarda kullanılan doğrulama mesela kullanıcı tarayıcıya bir mail ve parola ile bir login işlemi gerçekleştirince
+biz kullanıcının tarayıcısına bir cookie(çerez) bırakıyoruz ve kullanıcı bu siteyi sonra tekrar ziyaret ederse
+hatırlanması için gereken bazı bilgilerin tarayıcı belleğine saklanmasıdır. Yani user browserında saklı kalan bir bilgi ve buna cookie diyoruz.
+Ve cookie kullanarak bir Authentication işlemi gerçekleştirebiliyoruz.
+diyelim ki Kullanıcı bir login islemi gerceklestirdi (mail sifre bilgisi girdi) uygulama o kullanıcının tarayıcısına o cookieyi yani bilgiyi saklar ve 
+daha sonra kullanıcı her seferinde uygulamayı talep ettiginde o cookie de server tarafına uygulamaya gonderilir ve
+uygulama bu cookie icindeki bilgiye bakarak tekrar bir login islemine gerek kalmadan user'ın istediği kaynağı ona sunma islemidir
+
+
+Token Based Authentication - JWT	=> (Json Web Token olarak da adlandırılır)
+biz bir token bilgisi uygulamada olusturuyoruz ve bu token bilgisini usera gonderiyoruz ve user bu token bilgisini
+her seferinde bu tokenı talep ettigi kaynağa, uygulamaya, tekrar göndermesi gerekiyor. bu yontem mobil uygulamalarda kullanılıyor
+
+External Provider Authentication	=> google ile giris yap, facebook ile giris yap olayı budur.
+eger sen google ile facebook ile vs. Authentication islemi yapabiliyorsan benim uygulamamda sana guveniyor ve bu Authentication islemini benim app tarafından da kabul etme islemidir
+ 
+ */

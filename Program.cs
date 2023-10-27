@@ -26,8 +26,18 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 	options.User.RequireUniqueEmail = true; // ayný email ile farklý username alýp kayýt olunabiliyordu, artýk olamaz.
 	//options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
-});
 
+	options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+	options.Lockout.MaxFailedAccessAttempts = 5;					//eger user giris icin 5 kere hatalý girisimde bulunursa hesabý 2 dk boyunca kitlensin.
+});
+builder.Services.ConfigureApplicationCookie(options =>//authorize, cookie ayarlarýný buradan degistirebiliriz. 
+{
+	options.LoginPath = "/Account/Login"; //burasý zaten default olarak boyle gelir yazmasak da olur, ancak istersek degistirebiliriz.
+	options.AccessDeniedPath = "/Account/AccessDenied";//kullanýcý kayýt olmustur, ancak rolü yoktur ve user erisme yetkisi olmayan kýsma erismek isterse erisemez ve bu durumda kullanýcýyý yonlendirmek istediðimiz yer burasýdýr.
+	options.SlidingExpiration = true;
+	options.ExpireTimeSpan = TimeSpan.FromDays(30); //default olarak 14 gundur bu, bir cookie olusturuldugu zaman 14 gun gecerli bir cookie oluyor user giris yaptýktan 14 gun sonra user hiç logout olmazsa bu cookinin süresi biter. bu süreyi degisterbiliriz 30 gun yapalým.
+													//user bu zaman aralýgýnda tekrar logout login islemini yaparsa sure resetlenir
+});
 
 var app = builder.Build();
 
@@ -40,6 +50,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); //UseRouting() altýna bu middleware'i tanýmlayalým
 app.UseAuthorization();
 
 app.MapControllerRoute(
