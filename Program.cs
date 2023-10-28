@@ -14,8 +14,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<IdentityContext>(
 	options => options.UseSqlite(builder.Configuration["ConnectionStrings:SqLite_Connection"]));
-builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<IdentityContext>();
 
+builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
+//sifre, mail resetleme degistirme, mail onaylama gibi islemler icin gereken token bilgisini üretmek icin AddDefaultTokenProviders() yazýyoruz.
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -23,13 +24,16 @@ builder.Services.Configure<IdentityOptions>(options =>
 	options.Password.RequireLowercase = false;
 	options.Password.RequireUppercase = false;
 	options.Password.RequiredLength = 6;
-
+	
 	options.User.RequireUniqueEmail = true; // ayný email ile farklý username alýp kayýt olunabiliyordu, artýk olamaz.
 	//options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
 
 	options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
 	options.Lockout.MaxFailedAccessAttempts = 5;					//eger user giris icin 5 kere hatalý girisimde bulunursa hesabý 2 dk boyunca kitlensin.
+	options.SignIn.RequireConfirmedEmail = true; //boyle yaparak kullanýcý kayýt olurken mailini onaylamak zorunda dedik
+	//dbde EmailConfirmed columnu olarak mevcut ve default olarak 0, 1 olursa email onaylýdýr demektir. 
 });
+
 builder.Services.ConfigureApplicationCookie(options =>//authorize, cookie ayarlarýný buradan degistirebiliriz. 
 {
 	options.LoginPath = "/Account/Login"; //burasý zaten default olarak boyle gelir yazmasak da olur, ancak istersek degistirebiliriz.
