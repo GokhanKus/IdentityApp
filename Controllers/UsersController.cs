@@ -76,6 +76,9 @@ namespace IdentityApp.Controllers
 		public async Task<IActionResult> Edit(string id, EditViewModel model)
 		{
 			if (id != model.Id) return RedirectToAction("Index");
+			ViewBag.Roles = await _roleManager.Roles.Select(i => i.Name).ToListAsync(); 
+			//user bilgierini güncellerken - post ederken - eşleşmeyen password veya hatalı email girilirse
+			//Users/Edit.cshtml sayfasındaki ViewBag.Roles null reference hatası veriyordu o yüzden burada da viewbag.roles bilgilerini alalım ki null değer vermesin.
 
 			if (ModelState.IsValid)
 			{
@@ -83,6 +86,7 @@ namespace IdentityApp.Controllers
 
 				if (user != null)
 				{
+
 					user.Email = model.Email;
 					user.FullName = model.FullName;
 
