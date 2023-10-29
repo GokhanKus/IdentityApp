@@ -1,4 +1,5 @@
-﻿using IdentityApp.Models;
+﻿using IdentityApp.Interfaces;
+using IdentityApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -12,11 +13,13 @@ namespace IdentityApp.Controllers
 		private readonly RoleManager<AppRole> _roleManager;
 		private readonly UserManager<AppUser> _userManager;
 		private readonly SignInManager<AppUser> _signInManager;
-		public AccountController(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+		private readonly IEmailSender _emailSender;
+		public AccountController(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IEmailSender emailSender)
 		{
 			_roleManager = roleManager;
 			_userManager = userManager;
 			_signInManager = signInManager;
+			_emailSender = emailSender;
 		}
 		public IActionResult Login()
 		{
@@ -91,6 +94,9 @@ namespace IdentityApp.Controllers
 					var token = await _userManager.GenerateEmailConfirmationTokenAsync(user); //ilgili user icin bize bir token bilgisi üretsin ve program.cste AddDefaultTokenProvider()
 					var url = Url.Action("ConfirmEmail", "Account", new { user.Id, token });
 
+					await _emailSender.SendEmailAsync(user.Email,
+						"Hesap Onayi", 
+						$"Lutfen e-mail hesabinizi onaylamak icin linke <a href='http://localhost:40759{url}'>tiklayiniz.</a>");
 					//return RedirectToAction("Login", "Account");
 
 					TempData["message"] = "E-mail hesabınızdaki onay mailine tıklayınız.";
