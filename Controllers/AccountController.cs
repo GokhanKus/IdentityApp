@@ -130,5 +130,10 @@ namespace IdentityApp.Controllers
 			TempData["message"] = "Kullanıcı bulunamadı";
 			return View();
 		}
+		public async Task<IActionResult> Logout()
+		{
+			await _signInManager.SignOutAsync(); //application altında cookienin silinmesi?
+			return RedirectToAction("Login");
+		}
 	}
 }

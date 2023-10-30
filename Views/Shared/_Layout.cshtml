@@ -24,16 +24,47 @@
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
+
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-controller="Users" asp-action="Index">Users</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-controller="Roles" asp-action="Index">Roles</a>
-						</li>
+					<ul class="navbar-nav">
+						@if (User.Identity?.IsAuthenticated == true)
+						{
+							@if (User.IsInRole("admin")) //admin rolünde olan kisiler bu linkleri görebilsin, ancak yine de admin olmayanlar ilgili url'ye tıklarsa o sayfaya erişebilir bunun icin UsersController Index() metoduna bak
+							{
+								<li class="nav-item">
+									<a class="nav-link text-dark" asp-controller="Users" asp-action="Index">Users</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link text-dark" asp-controller="Roles" asp-action="Index">Roles</a>
+								</li>
+							}
+						}
+					</ul>
+					@*soldan margin ver kendini it sağa dogru(ms-auto)*@
+					<ul class="navbar-nav ms-auto">
+
+						@if (User.Identity?.IsAuthenticated == true) //eger dogrulanmis bir user ise burası calıssın
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark">Merhaba @User.Identity.Name</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
+							</li>
+						}
+						else
+						{
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-controller="Account" asp-action="Create">Register</a>
+							</li>
+						}
+
 					</ul>
 				</div>
+
 			</div>
 		</nav>
 	</header>
