@@ -7,7 +7,7 @@ namespace IdentityApp.Models
 		[Required]
 		public string Token { get; set; } = string.Empty;
 
-		//[Required]
+		[Required]
 		[DataType(DataType.EmailAddress)]
 		public string Email { get; set; } = string.Empty;
 
